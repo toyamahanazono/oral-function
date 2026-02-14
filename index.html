@@ -759,31 +759,6 @@
   text-decoration: underline;
 }
 
-/* === Ad Footer === */
-#ad-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #f0f0f0;
-  border-top: 1px solid #ddd;
-  text-align: center;
-  padding: 4px 0;
-  z-index: 9999;
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#ad-footer .ad-placeholder {
-  color: #999;
-  font-size: 12px;
-}
-
-/* Padding at bottom for ad space */
-body {
-  padding-bottom: 60px !important;
-}
 
 /* === Offline indicator === */
 #offline-indicator {
@@ -2264,25 +2239,6 @@ function iosDismiss() {
 <!-- Offline Indicator -->
 <div id="offline-indicator">📴 オフラインモード（キャッシュされたデータを表示中）</div>
 
-<!-- Ad Footer -->
-<div id="ad-footer">
-  <!-- Google AdSense Ad Unit (replace with your actual ad code) -->
-  <div class="ad-placeholder">
-    広告スペース（AdSense設定後に表示されます）
-  </div>
-  <!--
-    AdSense設定手順:
-    1. https://www.google.com/adsense/ でアカウント作成
-    2. サイトの審査を通過
-    3. 下記のコメントを実際の広告コードに置き換え:
-
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:320px;height:50px"
-         data-ad-client="ca-pub-XXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  -->
-</div>
 
 <script>
 // === Offline Detection ===
