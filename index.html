@@ -663,6 +663,66 @@
   .q-btn.sel-B { background:#FF9800; border-color:#FF9800; color:#fff; }
   .q-btn.sel-C { background:#4CAF50; border-color:#4CAF50; color:#fff; }
 
+/* === iOS Install Guide Banner === */
+#ios-install-banner {
+  display: none;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #333;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  z-index: 10000;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  max-width: 92vw;
+  width: 340px;
+  text-align: center;
+}
+#ios-install-banner .ios-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #00695C;
+}
+#ios-install-banner .ios-steps {
+  text-align: left;
+  line-height: 1.8;
+  font-size: 13px;
+}
+#ios-install-banner .ios-steps .step-icon {
+  display: inline-block;
+  width: 22px;
+  text-align: center;
+  margin-right: 4px;
+}
+#ios-install-banner .ios-arrow {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #fff;
+}
+#ios-install-banner .ios-btn-close {
+  background: #00695C;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
 /* === PWA Install Banner === */
 #pwa-install-banner {
   display: none;
@@ -2147,14 +2207,58 @@ function pwaDismiss() {
   var banner = document.getElementById('pwa-install-banner');
   if (banner) banner.style.display = 'none';
 }
+
+// === iOS Install Guide ===
+function iosShowGuide() {
+  var banner = document.getElementById('ios-install-banner');
+  if (banner) banner.style.display = 'flex';
+}
+function iosDismiss() {
+  var banner = document.getElementById('ios-install-banner');
+  if (banner) banner.style.display = 'none';
+  // Remember dismissal for 7 days
+  try { localStorage.setItem('ios-install-dismissed', Date.now()); } catch(e) {}
+}
+
+// Detect iOS Safari (not in standalone mode)
+(function() {
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|Chrome/.test(navigator.userAgent);
+  var isStandalone = window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+
+  if (isIOS && !isStandalone) {
+    // Check if dismissed recently
+    try {
+      var dismissed = localStorage.getItem('ios-install-dismissed');
+      if (dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 60 * 60 * 1000) return;
+    } catch(e) {}
+    // Show after 2 seconds
+    setTimeout(function() { iosShowGuide(); }, 2000);
+  }
+})();
 </script>
 
 
-<!-- PWA Install Banner -->
+<!-- PWA Install Banner (Android) -->
 <div id="pwa-install-banner">
   <span>📱 ホーム画面に追加してアプリとして使えます</span>
   <button class="pwa-btn-install" onclick="pwaInstall()">追加</button>
   <button class="pwa-btn-dismiss" onclick="pwaDismiss()">後で</button>
+</div>
+
+<!-- iOS Install Guide Banner -->
+<div id="ios-install-banner">
+  <div class="ios-title">📱 アプリとして使えます</div>
+  <div class="ios-steps">
+    <div><span class="step-icon">①</span> 画面下の <b>共有ボタン</b>（ <span style="font-size:17px;">⬆</span> ）をタップ</div>
+    <div><span class="step-icon">②</span> <b>「ホーム画面に追加」</b> を選択</div>
+    <div><span class="step-icon">③</span> 右上の <b>「追加」</b> をタップ</div>
+  </div>
+  <div style="font-size:12px;color:#888;">オフラインでも使えるようになります</div>
+  <button class="ios-btn-close" onclick="iosDismiss()">OK</button>
+  <div class="ios-arrow"></div>
 </div>
 
 <!-- Offline Indicator -->
